@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Solvent – Compare Auto Insurance Providers</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --green: #2db670;
+    --green-dark: #1f9a5c;
+    --green-light: #e8f8f0;
+    --teal: #2bbf8a;
+    --border: #c9eedd;
+    --text: #1a1a1a;
+    --muted: #888;
+    --white: #fff;
+    --bg: #fff;
+  }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ── Header ── */
+  header {
+    border-bottom: 1px solid #eee;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 62px;
+    background: #fff;
+  }
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    text-decoration: none;
+  }
+  .logo-text {
+    font-size: 1.7rem;
+    font-weight: 800;
+    color: var(--green);
+    letter-spacing: -0.5px;
+  }
+  .logo-icon {
+    width: 28px;
+    height: 28px;
+  }
+
+  /* ── Main layout ── */
+  main {
+    flex: 1;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 60px 20px 40px;
+    gap: 60px;
+  }
+  .hero {
+    flex: 1;
+    max-width: 440px;
+    padding-top: 30px;
+  }
+  .hero h1 {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: var(--green);
+    line-height: 1.2;
+    margin-bottom: 18px;
+  }
+  .hero p {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  /* ── Card ── */
+  .card {
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 14px;
+    padding: 28px 28px 28px;
+    width: 100%;
+    max-width: 420px;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.06);
+  }
+
+  /* ── Progress bar ── */
+  .progress-wrap {
+    height: 7px;
+    background: #e0e0e0;
+    border-radius: 99px;
+    margin-bottom: 22px;
+    overflow: hidden;
+  }
+  .progress-bar {
+    height: 100%;
+    background: var(--green);
+    border-radius: 99px;
+    transition: width 0.35s ease;
+  }
+
+  /* ── Question ── */
+  .question {
+    font-size: 1.05rem;
+    font-weight: 800;
+    text-align: center;
+    margin-bottom: 20px;
+    color: var(--text);
+  }
+
+  /* ── Option buttons ── */
+  .options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .opt-btn {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    background: #fff;
+    font-family: inherit;
+    font-size: 0.97rem;
+    font-weight: 600;
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.15s;
+    text-align: center;
+  }
+  .opt-btn:hover { border-color: var(--green); background: var(--green-light); }
+  .opt-btn.selected { background: var(--teal); color: #fff; border-color: var(--teal); }
+
+  /* ── Two-col buttons (Yes/No) ── */
+  .opt-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+
+  /* ── Navigation ── */
+  .nav-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: 4px;
+  }
+  .btn-back {
+    background: none;
+    border: none;
+    font-family: inherit;
+    font-size: 0.97rem;
+    font-weight: 700;
+    color: var(--text);
+    cursor: pointer;
+    padding: 10px 4px;
+  }
+  .btn-next {
+    flex: 1;
+    padding: 13px;
+    background: var(--green);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: 800;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .btn-next:hover { background: var(--green-dark); }
+  .btn-next:disabled { background: #a8dfc4; cursor: not-allowed; }
+
+  /* ── ZIP step ── */
+  .zip-label {
+    font-size: 1.05rem;
+    font-weight: 800;
+    text-align: center;
+    margin-bottom: 16px;
+  }
+  .zip-input {
+    width: 100%;
+    padding: 13px 14px;
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: 600;
+    text-align: center;
+    color: var(--text);
+    background: #f7f7f7;
+    outline: none;
+    margin-bottom: 14px;
+    transition: border 0.15s;
+  }
+  .zip-input:focus { border-color: var(--green); background: #fff; }
+
+  /* ── Email step ── */
+  .email-input {
+    width: 100%;
+    padding: 13px 14px;
+    border: 1.5px solid #ddd;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 0.97rem;
+    font-weight: 600;
+    color: #aaa;
+    background: #f7f7f7;
+    outline: none;
+    margin-bottom: 14px;
+    transition: border 0.15s;
+  }
+  .email-input:focus { border-color: var(--green); background: #fff; color: var(--text); }
+
+  .legal-text {
+    font-size: 0.72rem;
+    color: var(--muted);
+    text-align: center;
+    line-height: 1.5;
+    margin-top: 8px;
+  }
+  .legal-text a { color: var(--green); text-decoration: none; }
+
+  /* ── Final step ── */
+  .text-input {
+    width: 100%;
+    padding: 13px 14px;
+    border: 1.5px solid #ddd;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 0.97rem;
+    font-weight: 600;
+    color: #aaa;
+    background: #f7f7f7;
+    outline: none;
+    margin-bottom: 12px;
+    transition: border 0.15s;
+  }
+  .text-input:focus { border-color: var(--green); background: #fff; color: var(--text); }
+
+  .btn-submit {
+    width: 100%;
+    padding: 14px;
+    background: var(--green);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: 800;
+    cursor: pointer;
+    margin-bottom: 14px;
+    transition: background 0.15s;
+  }
+  .btn-submit:hover { background: var(--green-dark); }
+
+  .secure-badge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 12px;
+  }
+  .secure-badge img { height: 32px; }
+  .secure-box {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    border: 1.5px solid #ddd;
+    border-radius: 6px;
+    padding: 5px 12px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #555;
+  }
+  .secure-box svg { color: var(--green); }
+
+  /* ── Verifying overlay ── */
+  .verifying-overlay {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(255,255,255,0.88);
+    border-radius: 14px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 26px;
+    z-index: 10;
+  }
+  .verifying-text {
+    font-size: 1rem;
+    font-weight: 800;
+    color: var(--text);
+  }
+  .card-relative { position: relative; }
+
+  /* ── Footer ── */
+  footer {
+    background: #fff;
+    padding: 40px 20px 28px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+  .footer-logo .logo-text { font-size: 1.4rem; }
+  .footer-copy { font-size: 0.8rem; color: var(--muted); }
+  .footer-links { display: flex; gap: 18px; }
+  .footer-links a { font-size: 0.82rem; color: var(--green); text-decoration: none; }
+  .footer-links a:hover { text-decoration: underline; }
+  .footer-ca { font-size: 0.8rem; color: var(--muted); }
+  .footer-ca a { color: var(--green); text-decoration: none; }
+
+  /* ── Thank you screen ── */
+  .thank-you {
+    text-align: center;
+    padding: 10px 0 10px;
+  }
+  .thank-you .check-icon {
+    width: 64px; height: 64px;
+    background: var(--green);
+    border-radius: 16px;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 16px;
+  }
+  .thank-you h2 { font-size: 1.25rem; font-weight: 800; margin-bottom: 8px; color: var(--green); }
+  .thank-you .got-details { font-size: 0.97rem; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+  .thank-you .sub-text { font-size: 0.85rem; color: #666; line-height: 1.5; margin-bottom: 20px; }
+  .divider { border: none; border-top: 1px solid #eee; margin: 16px 0; }
+  .contact-box {
+    background: var(--green-light);
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 18px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+  .contact-label { font-size: 0.82rem; font-weight: 700; color: #555; text-transform: uppercase; letter-spacing: 0.04em; }
+  .contact-name { font-size: 0.92rem; font-weight: 800; color: var(--text); margin-bottom: 2px; }
+  .contact-role { font-size: 0.78rem; color: #888; margin-bottom: 4px; }
+  .call-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--green);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    padding: 13px 24px;
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: 800;
+    cursor: pointer;
+    text-decoration: none;
+    width: 100%;
+    justify-content: center;
+    transition: background 0.15s;
+  }
+  .call-btn:hover { background: var(--green-dark); }
+  .call-btn svg { flex-shrink: 0; }
+
+  /* ── Utility ── */
+  .hidden { display: none !important; }
+  .step { display: none; }
+  .step.active { display: block; }
+
+  @media (max-width: 700px) {
+    main { flex-direction: column; align-items: center; padding: 30px 16px 30px; gap: 24px; }
+    .hero { text-align: center; padding-top: 0; }
+    .hero h1 { font-size: 1.6rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<header>
+  <a class="logo" href="#">
+    <svg class="logo-icon" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M16 4C16 4 8 10 8 18C8 22.4 11.6 26 16 26C20.4 26 24 22.4 24 18C24 10 16 4 16 4Z" fill="#2db670"/>
+      <path d="M16 10C16 10 20 14 20 18C20 20.2 18.2 22 16 22" stroke="#fff" stroke-width="1.5" stroke-linecap="round"/>
+    </svg>
+    <span class="logo-text">Solvent</span>
+  </a>
+</header>
+
+<!-- Main -->
+<main>
+  <div class="hero">
+    <h1>Compare Auto Insurance Providers!</h1>
+    <p>Get your results in 2 minutes!</p>
+  </div>
+
+  <!-- Card -->
+  <div class="card card-relative" id="formCard">
+
+    <!-- Step 0: ZIP -->
+    <div class="step active" id="step-0">
+      <div class="zip-label">Enter Your Zip Code</div>
+      <input class="zip-input" type="text" id="zipInput" maxlength="5" placeholder="Enter zip code" value="" />
+      <button class="btn-next" style="width:100%" onclick="goNext()">Next ›</button>
+    </div>
+
+    <!-- Step 1: Currently insured -->
+    <div class="step" id="step-1">
+      <div class="progress-wrap"><div class="progress-bar" style="width:10%"></div></div>
+      <div class="question">Are you currently insured?</div>
+      <div class="opt-row">
+        <button class="opt-btn" onclick="selectOpt(this, 'insured','Yes')">Yes</button>
+        <button class="opt-btn" onclick="selectOpt(this, 'insured','No')">No</button>
+      </div>
+      <div class="nav-row">
+        <button class="btn-back" onclick="goBack()">‹ Back</button>
+        <button class="btn-next" id="next-1" onclick="goNext()">Next ›</button>
+      </div>
+    </div>
+
+    <!-- Step 2: Current insurer -->
+    <div class="step" id="step-2">
+      <div class="progress-wrap"><div class="progress-bar" style="width:22%"></div></div>
+      <div class="question">Who is your current insurer?</div>
+      <div class="options">
+        <button class="opt-btn" onclick="selectOpt(this,'insurer','State Farm')">State Farm</button>
+        <button class="opt-btn" onclick="selectOpt(this,'insurer','GEICO')">GEICO</button>
+        <button class="opt-btn" onclick="selectOpt(this,'insurer','Progressive')">Progressive</button>
+        <button class="opt-btn" onclick="selectOpt(this,'insurer','Allstate')">Allstate</button>
+        <button class="opt-btn" onclick="selectOpt(this,'insurer','USAA')">USAA</button>
+        <button class="opt-btn" onclick="selectOpt(this,'insurer','Other')">Other</button>
+      </div>
+      <div class="nav-row">
+        <button class="btn-back" onclick="goBack()">‹ Back</button>
+        <button class="btn-next" onclick="goNext()">Next ›</button>
+      </div>
+    </div>
+
+    <!-- Step 3: Multiple vehicles -->
+    <div class="step" id="step-3">
+      <div class="progress-wrap"><div class="progress-bar" style="width:36%"></div></div>
+      <div class="question">Are you insuring more than one vehicle?</div>
+      <div class="opt-row">
+        <button class="opt-btn" onclick="selectOpt(this,'multiVehicle','Yes')">Yes</button>
+        <button class="opt-btn" onclick="selectOpt(this,'multiVehicle','No')">No</button>
+      </div>
+      <div class="nav-row">
+        <button class="btn-back" onclick="goBack()">‹ Back</button>
+        <button class="btn-next" onclick="goNext()">Next ›</button>
+      </div>
+    </div>
+
+    <!-- Step 4: Own a home -->
+    <div class="step" id="step-4">
+      <div class="progress-wrap"><div class="progress-bar" style="width:50%"></div></div>
+      <div class="question">Do you currently own a home?</div>
+      <div class="opt-row">
+        <button class="opt-btn" onclick="selectOpt(this,'homeOwner','Yes')">Yes</button>
+        <button class="opt-btn" onclick="selectOpt(this,'homeOwner','No')">No</button>
+      </div>
+      <div class="nav-row">
+        <button class="btn-back" onclick="goBack()">‹ Back</button>
+        <button class="btn-next" onclick="goNext()">Next ›</button>
+      </div>
+    </div>
+
+    <!-- Step 5: Age range -->
+    <div class="step" id="step-5">
+      <div class="progress-wrap"><div class="progress-bar" style="width:64%"></div></div>
+      <div class="question">What's your age range?</div>
+      <div class="options">
+        <button class="opt-btn" onclick="selectOpt(this,'age','18-29')">18–29</button>
+        <button class="opt-btn" onclick="selectOpt(this,'age','30-44')">30–44</button>
+        <button class="opt-btn" onclick="selectOpt(this,'age','45-54')">45–54</button>
+        <button class="opt-btn" onclick="selectOpt(this,'age','55-64')">55–64</button>
+        <button class="opt-btn" onclick="selectOpt(this,'age','65+')">65+</button>
+      </div>
+      <div class="nav-row">
+        <button class="btn-back" onclick="goBack()">‹ Back</button>
+        <button class="btn-next" onclick="goNext()">Next ›</button>
+      </div>
+    </div>
+
+    <!-- Step 6: Credit score -->
+    <div class="step" id="step-6">
+      <div class="progress-wrap"><div class="progress-bar" style="width:78%"></div></div>
+      <div class="question">What's your credit score?</div>
+      <div class="options">
+        <button class="opt-btn" onclick="selectOpt(this,'credit','Excellent (750+)')">Excellent (750+)</button>
+        <button class="opt-btn" onclick="selectOpt(this,'credit','Good (720+)')">Good (720+)</button>
+        <button class="opt-btn" onclick="selectOpt(this,'credit','Average (660+)')">Average (660+)</button>
+        <button class="opt-btn" onclick="selectOpt(this,'credit','Fair (580+)')">Fair (580+)</button>
+        <button class="opt-btn" onclick="selectOpt(this,'credit','Poor (Below 580)')">Poor (Below 580)</button>
+        <button class="opt-btn" onclick="selectOpt(this,'credit','Not Sure')">Not Sure</button>
+      </div>
+      <div class="nav-row">
+        <button class="btn-back" onclick="goBack()">‹ Back</button>
+        <button class="btn-next" onclick="goNext()">Next ›</button>
+      </div>
+    </div>
+
+    <!-- Step 7: Email -->
+    <div class="step" id="step-7">
+      <div class="progress-wrap"><div class="progress-bar" style="width:90%"></div></div>
+      <div class="question">Where should we send your results?</div>
+      <input class="email-input" type="email" id="emailInput" placeholder="youremail@address.com" />
+      <div class="nav-row">
+        <button class="btn-back" onclick="goBack()">‹ Back</button>
+        <button class="btn-next" onclick="goNext()">Next ›</button>
+      </div>
+      <p class="legal-text" style="margin-top:12px">We take your privacy seriously. By clicking Next I confirm that I am a U.S. resident over the age of 18, I agree to the <a href="#">Terms and Conditions</a> and <a href="#">Privacy Policy</a>, and I agree to receive offers via email from Solvent.</p>
+    </div>
+
+    <!-- Step 8: Final details -->
+    <div class="step" id="step-8">
+      <div class="progress-wrap"><div class="progress-bar" style="width:100%"></div></div>
+      <div class="question">Last Step To Save Hundreds A Year!</div>
+      <input class="text-input" type="text" id="firstNameInput" placeholder="First Name" />
+      <input class="text-input" type="text" id="lastNameInput" placeholder="Last Name" />
+      <input class="text-input" type="tel" id="phoneInput" placeholder="Phone Number" />
+      <div style="display:flex;gap:10px;margin-top:4px">
+        <button class="btn-back" onclick="goBack()" style="padding:10px 4px;font-weight:700;cursor:pointer;background:none;border:none;font-family:inherit;font-size:0.97rem">‹ Back</button>
+        <button class="btn-submit" onclick="submitForm()">Submit</button>
+      </div>
+      <p class="legal-text">By entering and submitting a phone number, email, and other information and clicking Submit, you confirm that you are at least 18 years old. You provide your ESIGN signature and authorize us to share the information you provided with solvent.com and/or its <a href="#">network of advertisers</a>, and parties calling on their behalf. These parties may process and respond to your request and contact you for marketing and telemarketing purposes at the phone number and email address you provided, including your wireless number (if applicable), using live operators, automated telephone dialing systems, prerecorded, artificial and/or AI-generated voice, text messages, and/or emails—even if your number is listed on a company, state, or Federal Do Not Call registry. You also agree to our <a href="#">Terms of Use</a> and expressly consent to your information being used and disclosed as described in our <a href="#">Privacy Policy</a>. Message and data rates may apply. You are not required to provide consent as a condition of purchasing any goods or services and may revoke consent at any time.</p>
+      <div class="secure-badge">
+        <div class="secure-box">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+          SECURE<br/>SSL ENCRYPTION
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 9: Verifying -->
+    <div class="step" id="step-9">
+      <div class="progress-wrap"><div class="progress-bar" style="width:100%"></div></div>
+      <div class="question" style="color:var(--text);margin-top:30px">Verifying your information.</div>
+      <div style="display:flex;justify-content:center;margin:24px 0 30px">
+        <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="24" cy="24" r="20" stroke="#e0e0e0" stroke-width="5"/>
+          <path d="M24 4a20 20 0 0 1 20 20" stroke="#2db670" stroke-width="5" stroke-linecap="round">
+            <animateTransform attributeName="transform" type="rotate" from="0 24 24" to="360 24 24" dur="0.8s" repeatCount="indefinite"/>
+          </path>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Step 10: Thank you -->
+    <div class="step" id="step-10">
+      <div class="thank-you">
+        <div class="check-icon">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <h2>We've Got Your Details!</h2>
+        <p class="got-details">We're checking the best insurance options for you.</p>
+        <p class="sub-text">Our team is matching you with top-rated providers. Results will be sent to your inbox shortly.</p>
+        <hr class="divider"/>
+        <p class="contact-label">⚡ Get faster results — talk to your</p>
+        <div class="contact-box">
+          <div>
+            <div class="contact-name">Relationship Manager</div>
+            <div class="contact-role">Your Personal Insurance Guide</div>
+          </div>
+          <a class="call-btn" href="tel:+18005550199" id="callBtn">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 01.22 1.18 2 2 0 012.22 1h3a2 2 0 012 1.72c.13.96.36 1.9.7 2.81a2 2 0 01-.45 2.11L6.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0122 16.92z"/></svg>
+            Call Now: +1 (800) 555-0199
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /card -->
+</main>
+
+<!-- Footer -->
+<footer>
+  <a class="logo footer-logo" href="#">
+    <svg width="22" height="22" viewBox="0 0 32 32" fill="none"><path d="M16 4C16 4 8 10 8 18C8 22.4 11.6 26 16 26C20.4 26 24 22.4 24 18C24 10 16 4 16 4Z" fill="#2db670"/><path d="M16 10C16 10 20 14 20 18C20 20.2 18.2 22 16 22" stroke="#fff" stroke-width="1.5" stroke-linecap="round"/></svg>
+    <span class="logo-text">Solvent</span>
+  </a>
+  <p class="footer-copy">© 2026 Solvent</p>
+  <div class="footer-links">
+    <a href="#">Privacy Policy</a>
+    <a href="#">Terms of Use</a>
+  </div>
+  <p class="footer-ca">CA Consumers: <a href="#">Do Not Sell My Information</a></p>
+</footer>
+
+<script>
+  // State
+  const answers = {};
+  let currentStep = 0;
+  const totalSteps = 10; // 0..10
+
+  // Steps that are conditional
+  // Step 2 (current insurer) only shows if insured=Yes
+  function getStepSequence() {
+    const seq = [0, 1];
+    if (answers.insured === 'Yes') seq.push(2);
+    seq.push(3, 4, 5, 6, 7, 8, 9, 10);
+    return seq;
+  }
+
+  let stepHistory = [0];
+
+  function showStep(n) {
+    document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+    const el = document.getElementById('step-' + n);
+    if (el) el.classList.add('active');
+    currentStep = n;
+  }
+
+  function goNext() {
+    // Validate current step
+    if (currentStep === 0) {
+      const zip = document.getElementById('zipInput').value.trim();
+      if (!/^\d{5}$/.test(zip)) { alert('Please enter a valid 5-digit zip code.'); return; }
+      answers.zip = zip;
+    }
+    if (currentStep === 7) {
+      const email = document.getElementById('emailInput').value.trim();
+      if (!email || !email.includes('@')) { alert('Please enter a valid email address.'); return; }
+      answers.email = email;
+    }
+
+    const seq = getStepSequence();
+    const idx = seq.indexOf(currentStep);
+    if (idx === -1 || idx >= seq.length - 1) return;
+    const next = seq[idx + 1];
+    stepHistory.push(next);
+    showStep(next);
+
+    // If verifying step, auto-advance after 1.5s
+    if (next === 9) {
+      setTimeout(() => { showStep(10); }, 1800);
+    }
+  }
+
+  function goBack() {
+    if (stepHistory.length <= 1) return;
+    stepHistory.pop();
+    const prev = stepHistory[stepHistory.length - 1];
+    showStep(prev);
+  }
+
+  function selectOpt(btn, key, val) {
+    // Deselect siblings
+    const parent = btn.parentElement;
+    parent.querySelectorAll('.opt-btn').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    answers[key] = val;
+
+    // Auto-advance for single-select steps after short delay
+    const autoSteps = {
+      insured: 1,
+      multiVehicle: 3,
+      homeOwner: 4,
+      insurer: 2,
+      age: 5,
+      credit: 6,
+    };
+    // Auto advance
+    setTimeout(() => goNext(), 280);
+  }
+
+  // ── Google Sheets Integration ──────────────────────────────────────
+  // STEP 1: Paste your Google Apps Script Web App URL below
+  const GOOGLE_SHEET_URL = 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE';
+
+  async function sendToGoogleSheet(data) {
+    if (!GOOGLE_SHEET_URL || GOOGLE_SHEET_URL === 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE') {
+      console.warn('Google Sheet URL not configured. Data:', data);
+      return;
+    }
+    try {
+      await fetch(GOOGLE_SHEET_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...data, submittedAt: new Date().toISOString() })
+      });
+    } catch (err) {
+      console.error('Failed to send to Google Sheet:', err);
+    }
+  }
+
+  function submitForm() {
+    const first = document.getElementById('firstNameInput').value.trim();
+    const last = document.getElementById('lastNameInput').value.trim();
+    const phone = document.getElementById('phoneInput').value.trim();
+    if (!first || !last || !phone) { alert('Please fill in all fields.'); return; }
+    answers.firstName = first;
+    answers.lastName = last;
+    answers.phone = phone;
+
+    // Send to Google Sheet (non-blocking)
+    sendToGoogleSheet(answers);
+
+    console.log('Form submitted:', answers);
+    goNext();
+  }
+
+  // Init
+  showStep(0);
+</script>
+</body>
+</html>
